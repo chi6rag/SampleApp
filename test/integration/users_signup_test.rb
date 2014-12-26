@@ -33,4 +33,30 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
         }
       end
   end
+
+  test "valid signup" do
+    get signup_path
+
+    # bruteforce method
+    # before_count = User.count
+    # post users_path, user: {
+    #   name: "Chirag Aggarwal",
+    #   email: "chi6rag@gmail.com",
+    #   password: "123456789a",
+    #   password_confirmation: "123456789a"
+    # }
+    # after_count = User.count
+    # assert_not_equal before_count, after_count
+    
+    # improvised method
+    assert_difference 'User.count', 1 do
+      post_via_redirect users_path, user: {
+        name: "Chirag Aggarwal",
+        email: "chi6rag@gmail.com",
+        password: "123456789a",
+        password_confirmation: "123456789a"
+      }
+    end
+    assert_template 'users/show'
+  end
 end
