@@ -5,17 +5,18 @@
   <div class="col-md-6 col-md-offset-3">
     
     <%= form_for @user do |element| %>
+      <%= render partial: 'shared/error_messages' %>
       <%= element.label :name %>
-      <%= element.text_field :name %>
+      <%= element.text_field :name, class: 'form-control' %>
 
       <%= element.label :email %>
-      <%= element.text_field :email %>
+      <%= element.text_field :email, class: 'form-control' %>
 
       <%= element.label :password %>
-      <%= element.password_field :password %>
+      <%= element.password_field :password, class: 'form-control' %>
 
       <%= element.label :password_confirmation %>
-      <%= element.password_field :password_confirmation %>
+      <%= element.password_field :password_confirmation, class: 'form-control' %>
 
       <%= element.submit "Create my account", class: "btn btn-primary" %>
     <% end %>
