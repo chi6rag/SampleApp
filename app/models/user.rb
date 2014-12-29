@@ -21,8 +21,18 @@ class User < ActiveRecord::Base
   end
 
   # Remembers a user in the database for use in persistant session
+  # This method updates the value of remember_digest column in the db associated with the entered user
+  # to the digest of newly generated random string (token)
   def remember
-    User.remember_token = User.new_token
-    update_attribute(:remember_digest, User.digest(User.remember_token))
+    self.remember_token = User.new_token
+    update_attribute(:remember_digest, User.digest(remember_token))
+  end
+
+  # First converts remember_token to digest and confirms if the token 
+  # is same as the digest
+  # returns true if remember token's digest is same as the digest supplied 
+  # else false
+  def authenticated?(remember_token)
+    BCrypt::Password.new(remember_digest).is_password?(remember_token) 
   end
 end
