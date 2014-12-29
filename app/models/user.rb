@@ -28,6 +28,10 @@ class User < ActiveRecord::Base
     update_attribute(:remember_digest, User.digest(remember_token))
   end
 
+  def forget
+    update_attribute(:remember_digest, nil)
+  end
+
   # First converts remember_token to digest and confirms if the token 
   # is same as the digest
   # returns true if remember token's digest is same as the digest supplied 
