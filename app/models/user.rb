@@ -37,6 +37,6 @@ class User < ActiveRecord::Base
   # returns true if remember token's digest is same as the digest supplied 
   # else false
   def authenticated?(remember_token)
-    BCrypt::Password.new(remember_digest).is_password?(remember_token) 
+    !remember_digest.nil? ? BCrypt::Password.new(remember_digest).is_password?(remember_token) : false
   end
 end
