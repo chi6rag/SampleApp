@@ -28,6 +28,7 @@ class User < ActiveRecord::Base
     update_attribute(:remember_digest, User.digest(remember_token))
   end
 
+  # Updates remember digest (which is on server) to nil
   def forget
     update_attribute(:remember_digest, nil)
   end
