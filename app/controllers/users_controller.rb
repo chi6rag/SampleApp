@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   # by default, before filters apply to every action but the statement
   # only: [:edit, :update]
   # limits the filter to edit and update actions only
-  before_action :logged_in_user, only: [:edit, :update]
+  before_action :logged_in_user, only: [:edit, :update, :index]
   before_action :correct_user, only: [:edit, :update]
 
   def new
@@ -36,6 +36,10 @@ class UsersController < ApplicationController
     else
       render 'edit'
     end
+  end
+
+  def index
+    @users = User.all
   end
 
   private
