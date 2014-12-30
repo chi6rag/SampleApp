@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   # only: [:edit, :update]
   # limits the filter to edit and update actions only
   before_action :logged_in_user, only: [:edit, :update]
+  before_action :correct_user, only: [:edit, :update]
 
   def new
     @user = User.new
@@ -48,4 +49,13 @@ class UsersController < ApplicationController
       redirect_to login_url
     end
   end
+
+  # used to filter malcious users from updating the profiles of other users
+  # identifies that the user who has logged in when sends a patch request to
+  # update action with id of a different user, he gets redirected to the root url
+  def correct_user
+    @user = User.find(params[:id])
+    redirect_to root_url unless current_user?(@user)
+  end
+
 end
