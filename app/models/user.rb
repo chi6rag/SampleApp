@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id              :integer          not null, primary key
+#  name            :string
+#  email           :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  password_digest :string
+#  remember_digest :string
+#  admin           :boolean          default("f")
+#
+
 class User < ActiveRecord::Base
   attr_accessor :remember_token
   before_save { self.email = email.downcase }
