@@ -57,4 +57,25 @@ class UsersControllerTest < ActionController::TestCase
     get :index
     assert_redirected_to login_url
   end
+
+  # users who aren’t logged in should be redirected to the login page
+  test "should redirect destroy when not logged in" do
+    # User count before issuing delete request and after should be the same
+    # i.e. no delete occurs
+    assert_no_difference 'User.count' do
+      delete :destroy, id: @user
+    end
+    assert_redirected_to login_url
+  end
+
+  # non admin should not be able to issue delete request
+  test "should redirect destroy when logged in as a non-admin" do
+    # login as non-admin user
+    log_in_as(@other_user)
+    # no difference in db when non admin issues delete request
+    assert_no_difference 'User.count' do
+      delete :destroy, id: @user
+    end
+    assert_redirected_to root_url
+  end
 end

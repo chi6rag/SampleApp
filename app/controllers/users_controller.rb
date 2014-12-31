@@ -39,14 +39,9 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    @user = User.find(params[:id])
-    if @user.delete
-      flash[:success] = "Successfully deleted user #{params[:id]}"
-      redirect_to users_url
-    else
-      flash.now[:danger] = "Delete failed"
-      render users_url
-    end
+    User.find(params[:id]).destroy
+    flash[:success] = "Successfully deleted user #{params[:id]}"
+    redirect_to users_url
   end
 
   def index
@@ -75,7 +70,12 @@ class UsersController < ApplicationController
     redirect_to root_url unless current_user?(@user)
   end
 
+ # Confirms an admin user.
   def admin_user
-    redirect_to root_url unless current_user.admin?
+    if logged_in? && !current_user.admin?
+      redirect_to root_url
+    elsif !logged_in?
+      redirect_to(login_url)
+    end
   end
 end
