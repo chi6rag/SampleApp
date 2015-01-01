@@ -1,12 +1,14 @@
 class AccountActivationsController < ApplicationController
+  
   def edit
-    # find a user
+    # find the user by his email address
+    # if it exists, is unactivated and authentication details match, activate, login and redirect to userpath
+    # else flash invalid and redirect back to root
     user = User.find_by(email: params[:email])
     if user && !user.activated? && user.authenticated?(:activation, params[:id])
-      user.update_attribute(:activated, true)
-      user.update_attribute(:activated_at, Time.zone.now)
+      user.activate
       log_in user
-      flash[:success] =  "Account activated!"
+      flash[:success] = "Account activated!"
       redirect_to user
     else
       flash[:danger] = "Invalid activation link"

@@ -2,6 +2,10 @@ require 'test_helper'
   
 class UsersSignupTest < ActionDispatch::IntegrationTest
   
+  def setup
+    ActionMailer::Base.deliveries.clear
+  end
+  
   # purpose: verify that clicking the signup button results in
   # not creating a new user when the submitted information is invalid
   test "invalid signup information" do
@@ -34,7 +38,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
       end
   end
 
-  test "valid signup information" do
+  test "valid signup information with account activation" do
     get signup_path
     # bruteforce method
     # before_count = User.count
@@ -49,15 +53,33 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     
     # improvised method
     assert_difference 'User.count', 1 do
-      post_via_redirect users_path, user: {
+      post users_path, user: {
         name: "Chirag Aggarwal",
         email: "chi6rag@gmail.com",
         password: "123456789a",
         password_confirmation: "123456789a"
       }
     end
-
-    # assert_template 'users/show'
-    # assert is_logged_in?
+    # checks if only one mail has been sent
+    assert_equal 1, ActionMailer::Base.deliveries.size
+    user = assigns(:user)
+    assert_not user.activated?
+    # Try to login before activation
+    log_in_as(user)
+    assert_not is_logged_in?
+    # invalid activation token
+    get edit_account_activation_path("invalid token")
+    assert_not is_logged_in?
+    # valid token wrong email
+    get edit_account_activation_path(user.activation_token, email: 'wrong')
+    assert_not is_logged_in?
+    # valid activation token
+    get edit_account_activation_path(user.activation_token, email: user.email)
+    assert user.reload.activated?
+    follow_redirect!
+    assert_template 'users/show'
+    assert is_logged_in?
   end
+
+
 end
