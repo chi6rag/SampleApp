@@ -13,8 +13,10 @@
 #
 
 class User < ActiveRecord::Base
-  attr_accessor :remember_token
+  attr_accessor :remember_token, :activation_token
   before_save { self.email = email.downcase }
+  before_create :create_activation_digest
+
   validates :name, presence: true, length: { maximum: 50 }
   
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -53,5 +55,13 @@ class User < ActiveRecord::Base
   # else false
   def authenticated?(remember_token)
     !remember_digest.nil? ? BCrypt::Password.new(remember_digest).is_password?(remember_token) : false
+  end
+
+  # create_activation_digest is a method reference and
+  # it is executed before creation of user
+  # purpose - assign an activation token and an activation digest to the corresponding user
+  def create_activation_digest
+    self.activation_token = User.new_token
+    self.activation_digest = User.digest(activation_token)
   end
 end
