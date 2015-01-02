@@ -2,18 +2,23 @@
 #
 # Table name: users
 #
-#  id              :integer          not null, primary key
-#  name            :string
-#  email           :string
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  password_digest :string
-#  remember_digest :string
-#  admin           :boolean          default("f")
+#  id                :integer          not null, primary key
+#  name              :string
+#  email             :string
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  password_digest   :string
+#  remember_digest   :string
+#  admin             :boolean          default("f")
+#  activation_digest :string
+#  activated         :boolean          default("f")
+#  activated_at      :datetime
+#  reset_digest      :string
+#  reset_sent_at     :datetime
 #
 
 class User < ActiveRecord::Base
-  attr_accessor :remember_token, :activation_token
+  attr_accessor :remember_token, :activation_token, :reset_token
   before_save { self.email = email.downcase }
   before_create :create_activation_digest
 
@@ -74,5 +79,17 @@ class User < ActiveRecord::Base
 
   def send_activation_email
     UserMailer.account_activation(self).deliver_now
+  end
+
+  # sets the password reset attributes
+  def create_reset_digest
+    self.reset_token = User.new_token
+    update_attribute(:reset_digest, User.digest(reset_token))
+    update_attribute(:reset_sent_at, Time.zone.now)
+  end
+
+  # sends email to user requesting password reset
+  def send_password_reset_email
+    UserMailer.password_reset(self).deliver_now
   end
 end
