@@ -27,8 +27,8 @@ class PasswordResetsController < ApplicationController
   def update
     # four border cases
       # expired reset - done
-      # successful update
-      # failed update due to invalid password
+      # successful update - done
+      # failed update due to invalid password - done
       # failed update due to a blank password
     # end
     if both_passwords_blank?
