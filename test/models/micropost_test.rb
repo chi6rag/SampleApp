@@ -34,4 +34,11 @@ class MicropostTest < ActiveSupport::TestCase
     @micropost.content = "a" * 141
     assert_not @micropost.valid?
   end
+
+  # the order of the microposts should be most recent first
+  # compares the first micropost extracted from the micropost fixtures
+  # with microposts(:most_recent) of which created_at: Time.zone.now
+  test "order should be most recent first" do
+    assert_equal Micropost.first, microposts(:most_recent)
+  end
 end
