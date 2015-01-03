@@ -5,7 +5,7 @@
   <div class="col-md-6 col-md-offset-3">
     
     <%= form_for @user do |element| %>
-      <%= render partial: 'shared/error_messages' %>
+      <%= render 'shared/error_messages', object: element.object %>
       <%= element.label :name %>
       <%= element.text_field :name, class: 'form-control' %>
 
@@ -22,3 +22,4 @@
     <% end %>
   </div>
 </div>
+
