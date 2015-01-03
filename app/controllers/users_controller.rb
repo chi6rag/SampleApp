@@ -55,15 +55,6 @@ class UsersController < ApplicationController
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
 
-  # confirms a logged in user
-  def logged_in_user
-    unless logged_in?
-      store_location
-      flash[:danger] = "Please log in"
-      redirect_to login_url
-    end
-  end
-
   # used to filter malcious users from updating the profiles of other users
   # identifies that the user who has logged in when sends a patch request to
   # update action with id of a different user, he gets redirected to the root url
