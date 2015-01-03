@@ -27,4 +27,17 @@ class MicropostsControllerTest < ActionController::TestCase
     end
     assert_redirected_to login_url
   end
+
+  # should redirect destroy for wrong micropost
+  # login as fixture user michael
+  # deletion of ants micropost should bring no difference in database
+  # michael should be redirected to root
+  test "should redirect destroy for wrong micropost" do
+    log_in_as(users(:michael))
+    micropost = microposts(:ants)
+    assert_no_difference 'Micropost.count' do
+      delete :destroy, id: micropost
+    end
+    assert_redirected_to root_url
+  end
 end

@@ -2,6 +2,7 @@ require 'test_helper'
 
 class StaticPagesControllerTest < ActionController::TestCase
   test "should get home" do
+    # log_in_as(users(:michael))
     get :home
     assert_response :success
     assert_select "title", "Ruby on Rails Tutorial Sample App"
