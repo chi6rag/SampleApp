@@ -98,4 +98,12 @@ class User < ActiveRecord::Base
   def password_reset_expired?
     reset_sent_at < 2.hours.ago
   end
+
+  # gives a list of all the feeds associated with the user
+  def feed
+    Micropost.where("user_id= ?", id)
+
+    ## can also be written as follows
+    # microposts
+  end
 end
