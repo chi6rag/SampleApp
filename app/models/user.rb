@@ -22,6 +22,7 @@ class User < ActiveRecord::Base
                                   foreign_key:    "follower_id",
                                   dependent:      :destroy
   has_many :following, through: :active_relationships, source: :followed
+  has_many :followers, through: :passive_relationships, source: :follower
 
   # dependent: :destroy enables auto deletion of microposts upon deletion of user
   has_many :microposts, dependent: :destroy
@@ -126,4 +127,5 @@ class User < ActiveRecord::Base
   def following?(other_user)
     following.include?(other_user)
   end
+
 end
