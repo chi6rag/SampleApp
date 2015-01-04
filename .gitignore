@@ -19,3 +19,6 @@
 
 # Ignore spring directory
 spring/*.pid
+
+# ignore public/uploads
+/public/uploads
