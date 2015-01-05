@@ -130,4 +130,11 @@ class User < ActiveRecord::Base
     following.include?(other_user)
   end
 
+  # Returns a user's status feed.
+  def feed
+    # RAW-SQL        followed_ids returns all the people user follows
+    following_ids = "SELECT followed_id FROM relationships WHERE follower_id = :user_id"
+    Micropost.where("user_id IN (#{following_ids}) OR user_id = :user_id", user_id: id)
+  end
+
 end
