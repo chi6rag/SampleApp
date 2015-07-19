@@ -2,8 +2,8 @@ require 'test_helper'
 
 class StaticPagesControllerTest < ActionController::TestCase
   test "should get home" do
-    # log_in_as(users(:michael))
     get :home
+    byebug
     assert_response :success
     assert_select "title", "Ruby on Rails Tutorial Sample App"
   end
@@ -27,4 +27,3 @@ class StaticPagesControllerTest < ActionController::TestCase
 
   end
 end
- 
